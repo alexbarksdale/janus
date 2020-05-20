@@ -1,7 +1,7 @@
 {
    "name": "server",
    "version": "0.0.1",
-   "description": "Awesome project developed with TypeORM.",
+   "description": "Authentication microservice",
    "devDependencies": {
       "@types/bcryptjs": "^2.4.2",
       "@types/express": "^4.17.6",
@@ -18,10 +18,16 @@
       "typescript": "3.9.3"
    },
    "dependencies": {
+      "apollo-server-express": "^2.13.1",
       "bcryptjs": "^2.4.3",
+      "chalk": "^4.0.0",
+      "dotenv": "^8.2.0",
+      "express": "^4.17.1",
+      "graphql": "^15.0.0",
       "jsonwebtoken": "^8.5.1",
       "pg": "^8.2.1",
       "reflect-metadata": "^0.1.10",
+      "type-graphql": "^1.0.0-rc.2",
       "typeorm": "0.2.25"
    },
    "scripts": {
