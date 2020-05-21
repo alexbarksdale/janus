@@ -2,7 +2,7 @@ import { Resolver, Query, Mutation, Arg, Ctx } from 'type-graphql';
 
 import { hash, compare } from 'bcrypt';
 import { UserEntity } from '../entity/User.entity';
-import { genAccessToken, genRefreshToken } from '../utils/jwt';
+import { genAccessToken, genRefreshToken } from '../utils/jwt.utils';
 import { RegisterResponse, LoginResponse } from './types/auth.types';
 import { ReqRes } from '../context/reqres.context';
 
@@ -31,7 +31,7 @@ export class AuthResolver {
         try {
             await UserEntity.save(user);
         } catch (err) {
-            throw new Error(`Failed to register: ${err}`);
+            throw new Error('Failed to register');
         }
 
         return {
