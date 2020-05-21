@@ -1,18 +1,19 @@
 import 'reflect-metadata';
 import 'dotenv/config';
+import path from 'path';
 import express from 'express';
 import { createConnection } from 'typeorm';
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
 
 import { success, error } from './utils/consoleStyles';
-import { AuthResolver } from './resolvers/Auth.resolver';
 
 (async () => {
     const app = express();
     const PORT = process.env.PORT || 4000;
 
     try {
+        // Refer to the ormconfig.json to change the database settings
         await createConnection();
         console.log(`${success('SUCCESS')} Connected to the database.`);
     } catch (err) {
@@ -21,7 +22,7 @@ import { AuthResolver } from './resolvers/Auth.resolver';
 
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
-            resolvers: [AuthResolver],
+            resolvers: [path.join(__dirname, '/resolvers/**/*.{ts,js}')],
         }),
     });
 
