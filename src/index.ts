@@ -24,6 +24,7 @@ import { success, error } from './utils/consoleStyles';
         schema: await buildSchema({
             resolvers: [path.join(__dirname, '/resolvers/**/*.{ts,js}')],
         }),
+        context: ({ req, res }) => ({ req, res }),
     });
 
     apolloServer.applyMiddleware({ app });
