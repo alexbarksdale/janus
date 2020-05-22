@@ -1,8 +1,11 @@
 import { Resolver, Query, Mutation, Arg, Ctx } from 'type-graphql';
-
 import { hash, compare } from 'bcrypt';
+import { ApolloError } from 'apollo-server-express';
+
 import { UserEntity } from '../entity/User.entity';
 import { genAccessToken, genRefreshToken } from '../utils/jwt.utils';
+import { handleError } from '../utils/errors.utils';
+import { AuthErrorTypes } from '../utils/types/error.types';
 import { RegisterResponse, LoginResponse } from './types/auth.types';
 import { ReqRes } from '../context/reqres.context';
 
@@ -17,11 +20,11 @@ export class AuthResolver {
     async register(
         @Arg('email') email: string,
         @Arg('password') password: string
-    ): Promise<RegisterResponse> {
-        if (!email || !password) throw new Error('Email or password is missing!');
+    ): Promise<RegisterResponse | ApolloError> {
+        if (!email || !password) return handleError(AuthErrorTypes.MISSING_CREDENTIALS);
 
         const doesUserExist = await UserEntity.findOne({ where: { email } });
-        if (doesUserExist) throw new Error('Email is already registered.');
+        if (doesUserExist) return handleError(AuthErrorTypes.USER_EXISTS);
 
         // Create a new user
         const user = UserEntity.create();
@@ -31,7 +34,7 @@ export class AuthResolver {
         try {
             await UserEntity.save(user);
         } catch (err) {
-            throw new Error('Failed to register');
+            return handleError(AuthErrorTypes.REGISTRATION_FAIL);
         }
 
         return {
@@ -45,14 +48,14 @@ export class AuthResolver {
         @Arg('email') email: string,
         @Arg('password') password: string,
         @Ctx() { res }: ReqRes
-    ): Promise<LoginResponse> {
-        if (!email || !password) throw new Error('Email or password is missing!');
+    ): Promise<LoginResponse | ApolloError> {
+        if (!email || !password) return handleError(AuthErrorTypes.MISSING_CREDENTIALS);
 
         const user = await UserEntity.findOne({ where: { email } });
-        if (!user) throw new Error('Email or password is incorrect!');
+        if (!user) return handleError(AuthErrorTypes.INVALID_CREDENTIALS);
 
         const validPassword = await compare(password, user.password);
-        if (!validPassword) throw new Error('Email or password is incorrect!');
+        if (!validPassword) return handleError(AuthErrorTypes.INVALID_CREDENTIALS);
 
         // User is authenticated
         res.cookie('trident', genRefreshToken(user), {

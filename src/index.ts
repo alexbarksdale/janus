@@ -6,7 +6,7 @@ import { createConnection } from 'typeorm';
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
 
-import { success, error } from './utils/consoleStyles.utils';
+import { success, error } from './utils/console.utils';
 
 (async () => {
     const app = express();
