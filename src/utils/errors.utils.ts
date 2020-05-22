@@ -1,0 +1,54 @@
+import { ApolloError } from 'apollo-server-express';
+
+import { AuthErrorTypes } from './types/error.types';
+
+function userExists(): ApolloError {
+    throw new ApolloError(AuthErrorTypes.USER_EXISTS, '406', {
+        error: {
+            title: 'User Exists',
+            description: 'Email is already registered.',
+        },
+    });
+}
+
+function registrationFail(): ApolloError {
+    throw new ApolloError(AuthErrorTypes.REGISTRATION_FAIL, '500', {
+        error: {
+            title: 'Registration Fail',
+            description: 'Failed to register user.',
+        },
+    });
+}
+
+function missingCrendetials(): ApolloError {
+    throw new ApolloError(AuthErrorTypes.MISSING_CREDENTIALS, '406', {
+        error: {
+            title: 'Missing Credentials',
+            description: 'Required fields are missing!',
+        },
+    });
+}
+
+function invalidCredentials(): ApolloError {
+    throw new ApolloError(AuthErrorTypes.MISSING_CREDENTIALS, '401', {
+        error: {
+            title: 'Invalid Credentials',
+            description: 'Email or password is incorrect!',
+        },
+    });
+}
+
+export function handleError(error: AuthErrorTypes) {
+    switch (error) {
+        case AuthErrorTypes.USER_EXISTS:
+            return userExists();
+        case AuthErrorTypes.REGISTRATION_FAIL:
+            return registrationFail();
+        case AuthErrorTypes.MISSING_CREDENTIALS:
+            return missingCrendetials();
+        case AuthErrorTypes.INVALID_CREDENTIALS:
+            return invalidCredentials();
+        default:
+            throw new Error('Internal server error');
+    }
+}
