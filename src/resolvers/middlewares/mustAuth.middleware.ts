@@ -1,7 +1,7 @@
 import { MiddlewareFn } from 'type-graphql';
 import { verify } from 'jsonwebtoken';
 
-import { ReqRes } from '../../context/reqres.context';
+import { AuthContext } from '../../context/auth.context';
 import { handleError } from '../../utils/errors.utils';
 import { AuthErrorTypes } from '../../utils/types/error.types';
 
@@ -10,7 +10,7 @@ interface PayloadInterface {
     userEmail: string;
 }
 
-export const mustAuth: MiddlewareFn<ReqRes> = ({ context }, next) => {
+export const mustAuth: MiddlewareFn<AuthContext> = ({ context }, next) => {
     const authorized = context.req.headers.authorization;
     if (!authorized) return handleError(AuthErrorTypes.NOT_AUTHENTICATED);
 

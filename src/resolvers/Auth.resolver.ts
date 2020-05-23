@@ -3,14 +3,15 @@ import { hash, compare } from 'bcrypt';
 import { ApolloError } from 'apollo-server-express';
 
 import { UserEntity } from '../entity/User.entity';
+import { AuthContext } from '../context/auth.context';
+import { RegisterResponse, LoginResponse } from './types/auth.types';
 import { genAccessToken, genRefreshToken } from '../utils/jwt.utils';
 import { handleError } from '../utils/errors.utils';
 import { AuthErrorTypes } from '../utils/types/error.types';
-import { RegisterResponse, LoginResponse } from './types/auth.types';
-import { ReqRes } from '../context/reqres.context';
 
 @Resolver()
 export class AuthResolver {
+    // TODO: Remove later
     @Query(() => [UserEntity])
     users() {
         return UserEntity.find();
@@ -47,7 +48,7 @@ export class AuthResolver {
     async login(
         @Arg('email') email: string,
         @Arg('password') password: string,
-        @Ctx() { res }: ReqRes
+        @Ctx() { res }: AuthContext
     ): Promise<LoginResponse | ApolloError> {
         if (!email || !password) return handleError(AuthErrorTypes.MISSING_CREDENTIALS);
 
