@@ -47,7 +47,17 @@ function notAuthenticated(): ApolloError {
     });
 }
 
-export function handleError(error: AuthErrorTypes) {
+function missingToken(): ApolloError {
+    throw new ApolloError(AuthErrorTypes.MISSING_TOKEN, '406', {
+        error: {
+            title: 'Missing Token',
+            description:
+                "You haven't provided a token or valid format. Format: 'Bearer (token)'",
+        },
+    });
+}
+
+export async function handleError(error: AuthErrorTypes) {
     switch (error) {
         case AuthErrorTypes.USER_EXISTS:
             return userExists();
@@ -59,6 +69,8 @@ export function handleError(error: AuthErrorTypes) {
             return invalidCredentials();
         case AuthErrorTypes.NOT_AUTHENTICATED:
             return notAuthenticated();
+        case AuthErrorTypes.MISSING_TOKEN:
+            return missingToken();
         default:
             throw new Error('Internal server error');
     }
