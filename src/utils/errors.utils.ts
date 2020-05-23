@@ -38,6 +38,15 @@ function invalidCredentials(): ApolloError {
     });
 }
 
+function notAuthenticated(): ApolloError {
+    throw new ApolloError(AuthErrorTypes.NOT_AUTHENTICATED, '401', {
+        error: {
+            title: 'Not Authenticated',
+            description: 'You are not authorized!',
+        },
+    });
+}
+
 export function handleError(error: AuthErrorTypes) {
     switch (error) {
         case AuthErrorTypes.USER_EXISTS:
@@ -48,6 +57,8 @@ export function handleError(error: AuthErrorTypes) {
             return missingCrendetials();
         case AuthErrorTypes.INVALID_CREDENTIALS:
             return invalidCredentials();
+        case AuthErrorTypes.NOT_AUTHENTICATED:
+            return notAuthenticated();
         default:
             throw new Error('Internal server error');
     }
