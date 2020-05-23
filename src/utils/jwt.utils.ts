@@ -28,4 +28,3 @@ export const sendRefreshToken = (res: Response, token: string) => {
         httpOnly: true,
     });
 };
-
