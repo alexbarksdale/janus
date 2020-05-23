@@ -5,7 +5,7 @@ import { ApolloError } from 'apollo-server-express';
 import { UserEntity } from '../entity/User.entity';
 import { AuthContext } from '../context/auth.context';
 import { RegisterResponse, LoginResponse } from './types/auth.types';
-import { genAccessToken, genRefreshToken } from '../utils/jwt.utils';
+import { genAccessToken, genRefreshToken, sendRefreshToken } from '../utils/jwt.utils';
 import { handleError } from '../utils/errors.utils';
 import { AuthErrorTypes } from '../utils/types/error.types';
 
@@ -59,9 +59,7 @@ export class AuthResolver {
         if (!validPassword) return handleError(AuthErrorTypes.INVALID_CREDENTIALS);
 
         // User is authenticated
-        res.cookie('trident', genRefreshToken(user), {
-            httpOnly: true,
-        });
+        sendRefreshToken(res, genRefreshToken(user));
 
         return {
             user,
