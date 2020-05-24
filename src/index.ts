@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import 'dotenv/config';
 import path from 'path';
 import express from 'express';
+import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { createConnection } from 'typeorm';
 import { ApolloServer } from 'apollo-server-express';
@@ -14,6 +15,12 @@ import { router as refreshRouter } from './routers/refresh.router';
     const app = express();
     const PORT = process.env.PORT || 4000;
 
+    app.use(
+        cors({
+            origin: 'YOUR_URL',
+            credentials: true,
+        })
+    );
     app.use(cookieParser());
     app.use(refreshRouter);
 
@@ -32,7 +39,7 @@ import { router as refreshRouter } from './routers/refresh.router';
         context: ({ req, res }) => ({ req, res }),
     });
 
-    apolloServer.applyMiddleware({ app });
+    apolloServer.applyMiddleware({ app, cors: false });
 
     app.listen(PORT, () => {
         console.log(`${success('SUCCESS')} Janus is running on port: ${PORT}`);
