@@ -66,4 +66,9 @@ export class AuthResolver {
             accessToken: genAccessToken(user),
         };
     }
+
+    @Mutation()
+    logout(@Ctx() { res }: AuthContext) {
+        res.clearCookie('triton');
+    }
 }
