@@ -1,5 +1,6 @@
 import { Response } from 'express';
 import { sign } from 'jsonwebtoken';
+
 import { getConnection } from 'typeorm';
 
 import { UserEntity } from '../entity/User.entity';
@@ -27,6 +28,7 @@ export const genRefreshToken = (user: UserEntity) => {
 export const sendRefreshToken = (res: Response, token: string) => {
     res.cookie('trident', token, {
         httpOnly: true,
+        path: '/auth/refresh',
     });
 };
 
