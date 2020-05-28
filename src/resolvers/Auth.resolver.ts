@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Arg, Ctx } from 'type-graphql';
+import { Resolver, Mutation, Arg, Ctx } from 'type-graphql';
 import { hash, compare } from 'bcrypt';
 import { ApolloError } from 'apollo-server-express';
 
@@ -11,12 +11,6 @@ import { AuthErrorTypes } from '../utils/types/error.types';
 
 @Resolver()
 export class AuthResolver {
-    // TODO: Remove later
-    @Query(() => [UserEntity])
-    users() {
-        return UserEntity.find();
-    }
-
     @Mutation(() => RegisterResponse)
     async register(
         @Arg('email') email: string,
