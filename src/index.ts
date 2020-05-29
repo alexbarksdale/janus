@@ -39,10 +39,9 @@ import { router as refreshRouter } from './routers/refresh.router';
         context: ({ req, res }) => ({ req, res }),
     });
 
-    apolloServer.applyMiddleware({ app, cors: false });
+    apolloServer.applyMiddleware({ path: '/auth', app, cors: false });
 
     app.listen(PORT, () => {
         logger.info(`Janus is running on port: ${PORT}`);
     });
 })();
-

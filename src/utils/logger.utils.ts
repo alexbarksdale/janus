@@ -1,7 +1,7 @@
 import { createLogger, format, transports } from 'winston';
 
 const loggerFormat = format.combine(
-    format.label({ label: 'API' }),
+    format.label({ label: 'AUTH' }),
     format.timestamp({ format: 'MM/DD/YYYY HH:MM:SS' }),
 
     format.printf(({ timestamp, level, label, message }): string => {
