@@ -1,3 +1,3 @@
 # Janus
-🔐 Janus is an authentication microservice that I use for my personal projects.
+🔐 Janus is an authentication system created with GraphQL and JWT.
 
