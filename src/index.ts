@@ -8,12 +8,12 @@ import { createConnection } from 'typeorm';
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
 
-import { success, error } from './utils/console.utils';
+import { logger } from './utils/logger.utils';
 import { router as refreshRouter } from './routers/refresh.router';
 
 (async () => {
     const app = express();
-    const PORT = process.env.PORT || 4000;
+    const PORT = process.env.PORT || 5000;
 
     app.use(
         cors({
@@ -27,9 +27,9 @@ import { router as refreshRouter } from './routers/refresh.router';
     try {
         // Refer to the ormconfig.json to change the database settings
         await createConnection();
-        console.log(`${success('SUCCESS')} Connected to the database.`);
+        logger.info('Connected to the database.');
     } catch (err) {
-        console.log(`${error('ERROR')} Failed to connect to the database: ${err}`);
+        logger.error(`Failed to connect to the database: ${err}`);
     }
 
     const apolloServer = new ApolloServer({
@@ -42,6 +42,7 @@ import { router as refreshRouter } from './routers/refresh.router';
     apolloServer.applyMiddleware({ app, cors: false });
 
     app.listen(PORT, () => {
-        console.log(`${success('SUCCESS')} Janus is running on port: ${PORT}`);
+        logger.info(`Janus is running on port: ${PORT}`);
     });
 })();
+
