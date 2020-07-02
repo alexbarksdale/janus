@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import { verify } from 'jsonwebtoken';
 
 import { UserEntity } from '../entity/User.entity';
-import { genAccessToken, sendRefreshToken } from '../utils/jwt.utils';
+import { genAccessToken, sendRefreshToken, genRefreshToken } from '../utils/jwt.utils';
 
 export const router = express.Router();
 
@@ -27,7 +27,7 @@ router.post('/auth/refresh', async (req: Request, res: Response) => {
     }
 
     // User exists, sending tokens
-    sendRefreshToken(res, genAccessToken(user));
+    sendRefreshToken(res, genRefreshToken(user));
     return res.send({ authenticated: true, accessToken: genAccessToken(user) });
 });
 
