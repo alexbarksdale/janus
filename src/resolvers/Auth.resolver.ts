@@ -68,7 +68,7 @@ export class AuthResolver {
 
     @Mutation(() => Boolean)
     async logout(@Ctx() { res }: AuthContext): Promise<Boolean> {
-        res.clearCookie('triton');
+        res.clearCookie('triton', { path: '/auth/refresh' });
         return true;
     }
 }
